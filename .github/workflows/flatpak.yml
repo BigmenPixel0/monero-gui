@@ -1,20 +1,18 @@
 name: Flatpak
 
 on:
-  release:
-    types: released
+  push
 
 jobs:
   part1:
     name: Part 1/3
-    if: github.repository == 'monero-project/monero-gui'
     runs-on: ubuntu-latest
     container:
-      image: bilelmoussaoui/flatpak-github-actions:kde-5.15-23.08
+      image: bilelmoussaoui/flatpak-github-actions:kde-5.15-22.08
       options: --privileged
     strategy:
       matrix:
-        arch: [x86_64, aarch64]
+        arch: [x86_64]
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -48,7 +46,6 @@ jobs:
         arch: ${{ matrix.arch }}
         cache: false
         stop-at-module: boost
-        mirror-screenshots-url: https://dl.flathub.org/repo/screenshots
         build-log-url: https://github.com/monero-project/monero-gui/actions/runs/${{ github.run_id }}
         branch: stable
 
@@ -63,15 +60,14 @@ jobs:
 
   part2:
     name: Part 2/3
-    if: github.repository == 'monero-project/monero-gui'
     needs: part1
     runs-on: ubuntu-latest
     container:
-      image: bilelmoussaoui/flatpak-github-actions:kde-5.15-23.08
+      image: bilelmoussaoui/flatpak-github-actions:kde-5.15-22.08
       options: --privileged
     strategy:
       matrix:
-        arch: [x86_64, aarch64]
+        arch: [x86_64]
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -102,7 +98,6 @@ jobs:
         arch: ${{ matrix.arch }}
         cache: false
         stop-at-module: monero-gui
-        mirror-screenshots-url: https://dl.flathub.org/repo/screenshots
         build-log-url: https://github.com/monero-project/monero-gui/actions/runs/${{ github.run_id }}
         branch: stable
 
@@ -117,15 +112,14 @@ jobs:
 
   part3:
     name: Part 3/3
-    if: github.repository == 'monero-project/monero-gui'
     needs: [part1, part2]
     runs-on: ubuntu-latest
     container:
-      image: bilelmoussaoui/flatpak-github-actions:kde-5.15-23.08
+      image: bilelmoussaoui/flatpak-github-actions:kde-5.15-22.08
       options: --privileged
     strategy:
       matrix:
-        arch: [x86_64, aarch64]
+        arch: [x86_64]
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -134,8 +128,8 @@ jobs:
 
     - name: Add version and date
       run: |
-        sed -i 's/<version>/${{ github.event.release.tag_name }}/g' ${{ github.workspace }}/share/org.getmonero.Monero.metainfo.xml
-        sed -i 's/<date>/'"$(date '+%F')"'/g' ${{ github.workspace }}/share/org.getmonero.Monero.metainfo.xml
+        sed -i 's/<version>/${{ github.event.release.tag_name }}/g' $GITHUB_WORKSPACE/share/org.getmonero.Monero.metainfo.xml
+        sed -i 's/<date>/'"$(date '+%F')"'/g' $GITHUB_WORKSPACE/share/org.getmonero.Monero.metainfo.xml
 
     - name: Install deps
       run: dnf -y install docker
@@ -165,10 +159,6 @@ jobs:
         mirror-screenshots-url: https://dl.flathub.org/repo/screenshots
         build-log-url: https://github.com/monero-project/monero-gui/actions/runs/${{ github.run_id }}
         branch: stable
-
-    - name: Commit screenshots to OSTree
-      run: |
-        ostree commit --repo=repo --canonical-permissions --branch=screenshots/x86_64 flatpak_app/screenshots
 
     - name: Validate AppData
       working-directory: flatpak_app/files/share/appdata
