@@ -115,7 +115,7 @@ modules:
       - -DCMAKE_BUILD_TYPE=Release
       - -DWITH_DESKTOP_ENTRY=OFF
       - -DWITH_UPDATER=OFF
-      - -DGUI_VERSION_TAG=flatpak
+      - -DQT_VERSION_TAG=flatpak
     build-options:
       arch:
         aarch64:
