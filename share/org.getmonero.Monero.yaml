@@ -98,10 +98,9 @@ modules:
       - -DCMAKE_BUILD_TYPE=Release
       - -DWITH_LTO=OFF
     sources:
-      - type: git
-        url: https://github.com/SChernykh/p2pool
-        tag: v4.0
-        commit: 17de2ff4bc65898b64a72498418df5cf2760ce72
+      - type: archive
+        url: https://github.com/SChernykh/p2pool/releases/download/v4.0/p2pool_source.tar.xz
+        sha256: 8e0a6ecf3cfb9511cf86b40f6426ab2708bc5a0f500dca0bbe8e1be2fb0ff7cb
     post-install:
       - install -Dm755 p2pool $FLATPAK_DEST/bin/p2pool
 
