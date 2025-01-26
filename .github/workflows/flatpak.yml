@@ -69,11 +69,3 @@ jobs:
         echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
         echo "$ flatpak run --command=sha256sum org.getmonero.Monero /app/bin/monero-wallet-gui" >> $GITHUB_STEP_SUMMARY
         echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-
-    - name: Publish to Flathub
-      uses: flathub-infra/flatpak-github-actions/flat-manager@821846071bc503ec98c1db6b75530b571606e1a5
-      with:
-        flat-manager-url: https://hub.flathub.org
-        repository: stable
-        build-log-url: https://github.com/monero-project/monero-gui/actions/runs/${{ github.run_id }}
-        token: ${{ secrets.FLATHUB_TOKEN }}
