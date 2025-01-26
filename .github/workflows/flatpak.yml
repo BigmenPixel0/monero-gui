@@ -5,7 +5,7 @@ on:
     types: released
 
 jobs:
-  org.getmonero.Monero:
+  build:
     name: org.getmonero.Monero
     strategy:
       matrix:
